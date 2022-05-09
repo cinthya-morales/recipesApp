@@ -1,13 +1,16 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import SearchContext from '../context/searchContext';
-import { fetchDrinksByCategory, getDrinksRecipes } from '../services/fetchAPI';
+import { fetchDrinksByCategory,
+  getDrinksRecipes, getDrinkListByIngredient } from '../services/fetchAPI';
 
 function DrinksResults() {
   const { drinksList, setDrinksList,
     drinksCategoryList } = useContext(SearchContext);
 
   const [filtered, setFiltered] = useState('');
+
+  const { state } = useLocation();
 
   const maxNumber = 12;
   const MAX_CATEGORY = 5;
@@ -23,6 +26,16 @@ function DrinksResults() {
       setFiltered('');
     }
   };
+
+  useEffect(() => {
+    const fetchIngredient = async () => {
+      if (state.ingredient) {
+        const data = await getDrinkListByIngredient(state.ingredient);
+        setDrinksList(data);
+      }
+    };
+    fetchIngredient();
+  }, []);
 
   return (
     <main>

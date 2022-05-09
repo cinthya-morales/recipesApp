@@ -1,9 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import SearchContext from '../context/searchContext';
-import { getFoodRecipes, fetchFoodsByCategory } from '../services/fetchAPI';
+import { getFoodRecipes,
+  fetchFoodsByCategory, getFoodListByIngredient } from '../services/fetchAPI';
 
 function FoodsResults() {
+  const { state } = useLocation();
   const { foodsList, setFoodsList,
     foodsCategoryList } = useContext(SearchContext);
 
@@ -23,6 +25,16 @@ function FoodsResults() {
       setFiltered('');
     }
   };
+
+  useEffect(() => {
+    const fetchIngredient = async () => {
+      if (state.ingredient) {
+        const data = await getFoodListByIngredient(state.ingredient);
+        setFoodsList(data);
+      }
+    };
+    fetchIngredient();
+  }, []);
 
   return (
     <main>
