@@ -29,7 +29,7 @@ function DrinksResults() {
 
   useEffect(() => {
     const fetchIngredient = async () => {
-      if (state.ingredient) {
+      if (state?.ingredient) {
         const data = await getDrinkListByIngredient(state.ingredient);
         setDrinksList(data);
       }
