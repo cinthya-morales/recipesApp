@@ -1,13 +1,20 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import SearchContext from '../context/searchContext';
-import { getFoodRecipes, fetchFoodsByCategory } from '../services/fetchAPI';
+import { getFoodRecipes,
+  fetchFoodsByCategory, getFoodListByIngredient } from '../services/fetchAPI';
+import ResultsList from './ResultsList';
 
 function FoodsResults() {
+  const { state } = useLocation();
   const { foodsList, setFoodsList,
     foodsCategoryList } = useContext(SearchContext);
 
   const [filtered, setFiltered] = useState('');
+
+  const [filterByIngredient, setFilterByIngredient] = useState([]);
+
+  const [ingredientCheck, setIngredientCheck] = useState(false);
 
   const maxNumber = 12;
   const MAX_CATEGORY = 5;
@@ -23,6 +30,18 @@ function FoodsResults() {
       setFiltered('');
     }
   };
+
+  useEffect(() => {
+    const fetchIngredient = async () => {
+      if (state?.ingredient) {
+        const data = await getFoodListByIngredient(state.ingredient);
+        setFilterByIngredient(data);
+        setIngredientCheck(true);
+      }
+    };
+    fetchIngredient();
+    return () => setFoodsList([]);
+  }, []);
 
   return (
     <main>
@@ -50,20 +69,18 @@ function FoodsResults() {
           ))}
       </section>
 
-      {foodsList.length > 0 && foodsList
-        .filter((_e, index) => index < maxNumber)
-        .map(({ strMeal, strMealThumb, idMeal }, index) => (
-          <Link to={ `/foods/${idMeal}` } key={ index }>
-            <div data-testid={ `${index}-recipe-card` }>
-              <p data-testid={ `${index}-card-name` }>{strMeal}</p>
-              <img
-                src={ strMealThumb }
-                alt="recipe"
-                data-testid={ `${index}-card-img` }
-              />
-            </div>
-          </Link>
-        ))}
+      {ingredientCheck
+        ? filterByIngredient
+          .slice(0, maxNumber)
+          .map((food, index) => (
+            <ResultsList key={ index } data={ food } index={ index } />
+          )) : (
+          foodsList.length > 0
+          && foodsList
+            .slice(0, maxNumber)
+            .map((food, index) => (
+              <ResultsList key={ index } data={ food } index={ index } />)))}
+
     </main>
   );
 }

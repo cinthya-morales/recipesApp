@@ -63,3 +63,17 @@ export async function getNationalityFood(nationality) {
   const data = await response.json();
   return data.meals;
 }
+
+export async function getFoodListByIngredient(ingredient) {
+  const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.meals;
+}
+
+export async function getDrinkListByIngredient(ingredient) {
+  const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.drinks;
+}

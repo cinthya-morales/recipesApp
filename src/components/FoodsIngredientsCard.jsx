@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 function FoodsIngredientsCard() {
+  const { push } = useHistory();
   const [ingredients, setIngredient] = useState('');
 
   async function fetchIngredients() {
@@ -16,13 +17,25 @@ function FoodsIngredientsCard() {
 
   const MAX_INGREDIENTS = 12;
 
+  function redirect(ingredient) {
+    push({
+      pathname: '/foods',
+      state: { ingredient },
+    });
+  }
+
   return (
     <div>
       {ingredients.length !== 0
       && ingredients
         .slice(0, MAX_INGREDIENTS)
         .map((item, index) => (
-          <Link to="/foods" key={ index }>
+          // <Link to="/foods" key={ index }>
+          <div
+            key={ index }
+            onClick={ () => redirect(item.strIngredient) }
+            role="presentation"
+          >
             <button
               type="button"
               data-testid={ `${index}-ingredient-card` }
@@ -35,7 +48,7 @@ function FoodsIngredientsCard() {
                 alt={ item.strIngredient }
               />
             </button>
-          </Link>
+          </div>
         ))}
     </div>
   );
