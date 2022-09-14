@@ -1,16 +1,13 @@
-# 🚧 README em construção 🚧
+# App de Receitas
 
-<!-- Olá, Tryber!
+Projeto em grupo proposto com objetivo de criar uma aplicação de receitas consumindo uma API de comidas e outra de bebidas. 
 
-Esse é apenas um arquivo inicial para o README do seu projeto.
+Para realização desse projeto foi utilizado React, React Hooks, Context API, JavaScript, Styled Components, Jest e Cypress.
 
-É essencial que você preencha esse documento por conta própria, ok?
+## Instalação
 
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
+    npm install
 
-⚠️ IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
+## Executando
 
--->
+    npm start
